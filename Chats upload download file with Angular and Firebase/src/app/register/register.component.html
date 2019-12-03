@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header">
+        Register
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="row" *ngFor="let element of elements">
+                <div class="col">
+                    <div class="form-group position-relative">
+                        <label for="my-{{element}}">{{showLabel(element)}}</label>
+                        <input id="my-{{element}}" class="form-control" type="text" 
+                        (keyup) = "onkeyup($event.target.value, element)">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="button" [disabled] = "disButton()" (click)="register()">Register</button>
+       </form>
+    </div>
+</div>

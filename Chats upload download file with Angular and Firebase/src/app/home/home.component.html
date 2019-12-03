@@ -1,0 +1,111 @@
+<div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+        <div class="col-md-4 col-xl-3 chat">
+            <div class="card mb-sm-3 mb-md-0 contacts_card">
+                <div class="card-header">
+                    Contacts List
+                </div>
+                <div class="card-body contacts_body">
+                    <ul class="contacts">
+                        <li [ngClass]="{active: selectedUser(user)}" *ngFor="let user of users" (click)='userSelect(user)'>
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    <img src="{{user.imgurl}}" class="rounded-circle user_img">
+                                    <span *ngIf="presence$ | async as presence" class="online_icon"
+                                        [ngClass]="{'offline': statusIcon(user.status)}"></span>
+                                </div>
+                                <div class="user_info">
+                                    <span>{{user.email}}</span>
+                                    <p>{{user.email}} is {{user.status}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-xl-6 chat">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="{{chatWithUser.imgurl}}" class="rounded-circle user_img">
+                                <span class="online_icon" [ngClass]="{'offline': statusIcon(chatWithUser.status)}"></span>
+                            </div>
+                            <div class="user_info">
+                                <span>Chat with {{chatWithUser.email}}</span>
+                                <p>Messages</p>
+                            </div>
+                    </div>
+
+                </div>
+                <div class="card-body" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                    <div *ngFor="let chat of chats">
+                        <div *ngIf="showMsgStart(chat)">
+                            <div *ngIf="showMsg(chat)" class="d-flex justify-content-start mb-4">
+								<div class="img_cont_msg">
+									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+								</div>
+								<div class="msg_cotainer">
+									{{chat.msg}}
+									<span class="msg_time">{{chat.timstamp}}</span>
+								</div>
+                            </div>
+                            <div *ngIf="showAtt(chat)" class="d-flex justify-content-start mb-4">
+                                <div class="attach_file" (click)='download(chat)'>
+                                    <span class="fa-li"><i class="fa fa-file"></i></span>
+                                    <span>{{chat.attachname}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="showMsgEnd(chat)">
+                            <div *ngIf="showMsg(chat)" class="d-flex justify-content-end mb-4">
+								<div class="msg_cotainer_send">
+                                        {{chat.msg}}
+									<span class="msg_time_send">{{chat.timstamp}}</span>
+								</div>
+								<div class="img_cont_msg">
+                                    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+								</div>
+                            </div>
+                            <div *ngIf="showAtt(chat)" class="d-flex justify-content-end mb-4">
+                                <div class="attach_file" (click)='download(chat)'>
+                                    <span class="fa-li"><i class="fa fa-file"></i></span>
+                                    <span>{{chat.attachname}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div>
+                        <ul>
+                            <li (mouseover)='onMouse(i)' (mouseleave) = "onMouseOut()" *ngFor="let file of listFile; let i=index">
+                                <span>{{file.name}}</span>
+                                <span [style.display] = "isActive(i) ? '' : 'none'" (click)='deleteFileSelected(i)'><i class="fa fa-times-circle"></i></span> 
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <span class="input-group-text attach_btn" (click)='fileInput.click()'>
+                                <i class="fa fa-paperclip"></i>
+                                <input
+                                    hidden
+                                    type="file"
+                                    name="file"
+                                    #fileInput
+                                    (change)="onChange(fileInput.files[0])"/>
+                            </span>
+                        </div>
+                        <textarea #msg class="form-control type_msg" placeholder="Type your message..."
+                        (keyup)='hotkey($event)'></textarea>
+                        <div class="input-group-append">
+                            <span class="input-group-text send_btn" (click)='sendMsg(msg)'><i class="fa fa-location-arrow"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
